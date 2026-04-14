@@ -10,19 +10,19 @@
 - **Strategy:** Search SEO, Promotion Planning, CRM Marketing, Pricing Strategy
 
 ## 🏢 Work Experience
-**[Growth] 이노센트 (Innocent)** | MD | *2025.07 ~ Present*
+**이노센트 (Innocent)** | MD | *2025.07 ~ Present*
 - **Portfolio Scaling:** 신상품 매출 비중 **3% → 10%** 확대 및 카테고리 경쟁력 강화
 - **Channel Strategy:** 브랜드스토어 전담 운영 및 종합몰 프로모션 기획 주도
 
-**[Performance] 헬스맥스 (HealthMax)** | 커머스 MD | *2023.12 ~ 2024.12*
+**헬스맥스 (HealthMax)** | 커머스 MD | *2023.12 ~ 2024.12*
 - **Sales Record:** 검색 광고 최적화로 쿠팡 월 매출 **200% 성장** 달성
 - **High Conversion:** 타겟 CRM 마케팅 진행으로 구매 전환율 **10.9%** 기록
 
-**[System] 더파이러츠 (The Pirates)** | AMD | *2020.07 ~ 2023.11*
+**더파이러츠 (The Pirates)** | AMD | *2020.07 ~ 2023.11*
 - **Optimization:** 업무 체크리스트 및 가격 관리 타임라인 시트 구축으로 **운영 효율 극대화**
 - **Process Design:** 자사 주문 관리 시스템 개발 기획 및 데이터 기반 재고 관리 체계 수립
 
-**[Foundation] 엠솔디에이치 / 뷰티플휴먼** | MD/AMD | *2019.03 ~ 2020.07*
+**엠솔디에이치** | AMD | *2019.03 ~ 2020.07*
 - **Management:** 20개 이상 다채널 통합 관리 프로세스 수립 및 SCM 기반 재고 관리 시스템 안정화
 
 > 🔍 **[상세 경력 및 프로젝트 성과 보기](./experience/README.md)**
