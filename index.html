@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>채널 통합 SEO 상품명 조합기</title>
+    <title>스마트 SEO 상품명 조합기 & 키워드 분석</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-8 font-sans">
-    <div class="max-w-5xl mx-auto">
-        <div class="bg-white p-6 rounded-lg shadow-sm mb-6 flex justify-between items-center">
+    <div class="max-w-6xl mx-auto">
+        <div class="bg-white p-6 rounded-lg shadow-sm mb-6 flex justify-between items-center border-b-4 border-indigo-600">
             <div>
-                <h1 class="text-2xl font-bold text-gray-800 mb-1">채널 통합 SEO 상품명 조합기</h1>
-                <p class="text-gray-500 text-sm">입력한 키워드를 바탕으로 각 플랫폼 규칙에 맞는 상품명을 자동 완성합니다.</p>
+                <h1 class="text-2xl font-bold text-gray-800 mb-1">스마트 SEO 상품명 조합기</h1>
+                <p class="text-gray-500 text-sm">상품 카테고리를 입력하면 시스템이 산업군을 자동 감지하여 맞춤형 키워드를 세팅합니다.</p>
             </div>
             <a href="https://ma-pia.net/keyword/keyword.php" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold px-5 py-2.5 rounded shadow-md transition flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -19,47 +19,50 @@
             </a>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow-sm mb-6 grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div class="bg-white p-6 rounded-lg shadow-sm mb-6 grid grid-cols-1 md:grid-cols-5 gap-4 bg-indigo-50/30">
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">브랜드명</label>
-                <input type="text" id="inputBrand" value="" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="브랜드명">
+                <input type="text" id="inputBrand" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="이노센트">
             </div>
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">메인 키워드</label>
-                <input type="text" id="inputMain" value="" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="시리즈명">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">시리즈명 (메인)</label>
+                <input type="text" id="inputMain" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="시리즈명">
             </div>
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">속성/서브 키워드</label>
-                <input type="text" id="inputSub" value="" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="상품명칭">
+                <label class="block text-sm font-bold text-indigo-700 mb-1">카테고리 (자동감지✨)</label>
+                <input type="text" id="inputCategory" class="w-full border-indigo-400 rounded border-2 p-2 focus:ring-2 focus:ring-indigo-600 outline-none shadow-sm" placeholder="예: 수납 침대, 비타민, 원피스">
             </div>
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">옵션/사이즈</label>
-                <input type="text" id="inputOption" value="" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="옵션명">
+                <input type="text" id="inputOption" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="옵션명">
             </div>
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">감성/홍보 수식어</label>
-                <input type="text" id="inputMod" value="" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="상품특징">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">상품특징 (스타일)</label>
+                <input type="text" id="inputMod" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="상품특징">
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500 relative">
                 <div class="flex justify-between items-center mb-3">
                     <h2 class="text-lg font-bold text-gray-800">🟢 네이버 스마트스토어</h2>
                     <span id="lenNaver" class="text-sm font-semibold px-2 py-1 rounded bg-gray-100 text-gray-600">0 / 50자</span>
                 </div>
+                <p class="text-xs text-gray-500 mb-2">규칙: 특수문자/과장표현 불가. 빈 공간에 맞춤형 키워드 자동 추가.</p>
                 <div class="flex gap-2">
                     <input type="text" id="outNaver" class="w-full border-gray-200 rounded border p-3 bg-gray-50 text-gray-800 font-medium" readonly>
                     <button onclick="copyText('outNaver', this)" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm whitespace-nowrap transition">복사</button>
                 </div>
-                <p id="warnNaver" class="text-red-500 text-xs mt-2 hidden">⚠️ 네이버 SEO 권장 글자 수(50자)를 초과했습니다!</p>
+                <p id="warnNaver" class="text-red-500 text-xs mt-2 hidden">⚠️ 50자 초과! 네이버 로직에 불리할 수 있습니다.</p>
             </div>
 
             <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-red-500">
                 <div class="flex justify-between items-center mb-3">
                     <h2 class="text-lg font-bold text-gray-800">🔴 쿠팡 (로켓/윙)</h2>
-                    <span id="lenCoupang" class="text-sm font-semibold px-2 py-1 rounded bg-gray-100 text-gray-600">0 자</span>
+                    <span id="lenCoupang" class="text-sm font-semibold px-2 py-1 rounded bg-gray-100 text-gray-600">0 / 70자</span>
                 </div>
+                <p class="text-xs text-gray-500 mb-2">규칙: 광고문구 불가, 특수문자 제한적 허용, 옵션 명확히 표기.</p>
                 <div class="flex gap-2">
                     <input type="text" id="outCoupang" class="w-full border-gray-200 rounded border p-3 bg-gray-50 text-gray-800 font-medium" readonly>
                     <button onclick="copyText('outCoupang', this)" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm whitespace-nowrap transition">복사</button>
@@ -71,6 +74,7 @@
                     <h2 class="text-lg font-bold text-gray-800">🏠 오늘의집</h2>
                     <span id="lenOhouse" class="text-sm font-semibold px-2 py-1 rounded bg-gray-100 text-gray-600">0 자</span>
                 </div>
+                <p class="text-xs text-gray-500 mb-2">규칙: 브랜드+스타일+시리즈+카테고리+옵션. (감성 키워드 우선)</p>
                 <div class="flex gap-2">
                     <input type="text" id="outOhouse" class="w-full border-gray-200 rounded border p-3 bg-gray-50 text-gray-800 font-medium" readonly>
                     <button onclick="copyText('outOhouse', this)" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm whitespace-nowrap transition">복사</button>
@@ -82,6 +86,7 @@
                     <h2 class="text-lg font-bold text-gray-800">🟣 종합몰 (롯데온/SSG 등)</h2>
                     <span id="lenGeneral" class="text-sm font-semibold px-2 py-1 rounded bg-gray-100 text-gray-600">0 자</span>
                 </div>
+                <p class="text-xs text-gray-500 mb-2">규칙: 불필요한 수식어/옵션 제거. 간결함 유지.</p>
                 <div class="flex gap-2">
                     <input type="text" id="outGeneral" class="w-full border-gray-200 rounded border p-3 bg-gray-50 text-gray-800 font-medium" readonly>
                     <button onclick="copyText('outGeneral', this)" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm whitespace-nowrap transition">복사</button>
@@ -89,68 +94,227 @@
             </div>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-indigo-500 mt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div>
-                <h2 class="text-lg font-bold text-gray-800 mb-1">📊 연관 검색어 트래픽 분석</h2>
-                <p class="text-sm text-gray-500">상품명을 복사한 뒤, 우측 버튼을 눌러 연관 키워드의 실시간 검색수를 확인해 보세요.</p>
+        <div class="bg-white p-6 rounded-lg shadow-sm border-t-4 border-yellow-400 relative">
+            <div id="toastMsg" class="absolute -top-12 right-0 bg-gray-800 text-white text-sm font-bold px-4 py-3 rounded shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none flex items-center gap-2 z-50">
+                <span id="toastText">복사 완료!</span>
+                <span class="bg-yellow-400 text-gray-900 text-xs px-2 py-1 rounded">마피아에 검색하세요</span>
             </div>
-            <a href="https://ma-pia.net/keyword/keyword.php" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold px-6 py-3 rounded shadow-md transition flex items-center gap-2 whitespace-nowrap">
-                🔍 관련 키워드 확인
-            </a>
+
+            <div class="flex justify-between items-end mb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800 mb-1 flex items-center gap-2">
+                        💡 AI 자동 추천 키워드 
+                        <span id="detectedBadge" class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded font-normal">카테고리를 입력하세요</span>
+                    </h2>
+                    <p class="text-sm text-gray-500">카테고리를 입력하면 산업군을 자동 분석하여 클릭률이 높은 키워드를 추천합니다. (배지 클릭 시 복사)</p>
+                </div>
+            </div>
+
+            <div id="outKeywords" class="flex flex-col gap-4 mt-4 bg-gray-50 p-4 rounded border border-gray-100">
+                <span class="text-gray-400 text-sm text-center py-4">카테고리 칸에 '침대', '비타민', '원피스' 등 상품을 입력해 보세요.</span>
+            </div>
         </div>
 
     </div>
 
     <script>
-        const inputs = ['inputBrand', 'inputMain', 'inputSub', 'inputOption', 'inputMod'];
+        const inputs = ['inputBrand', 'inputMain', 'inputCategory', 'inputOption', 'inputMod'];
         inputs.forEach(id => {
             document.getElementById(id).addEventListener('input', generateNames);
         });
+
+        // 1. 공통 금지어 사전 (입력값에서 자동 삭제)
+        const bannedWordsNaver = ['최저가', '1위', '추천', '특가', '할인', '세일', '무료배송', '당일출고', '사은품'];
+        const bannedWordsCoupang = ['무료배송', '당일출고', '특가', '세일', '최저가', '사은품', '이벤트'];
+
+        // 2. 🌟 산업군별 자동 감지 사전 (핵심 기술) 🌟
+        const categoryDict = {
+            furniture: {
+                name: '가구 / 홈인테리어',
+                triggers: ['침대', '소파', '의자', '책상', '식탁', '매트리스', '선반', '수납', '조명', '커튼', '러그', '이불', '거울', '협탁'],
+                target: ['신혼', '1인가구', '원룸', '자취방', '아이방', '입주', '거실'],
+                trend: ['감성', '미니멀', '모던', '오늘의집', '홈인테리어', '디자인', '북유럽'],
+                intent: ['가성비', '튼튼한', '편안한'],
+                autoNaver: ['1인가구', '원룸', '홈인테리어', '입주'],
+                autoOhouse: ['미니멀', '감성', '포근한', '홈스타일링']
+            },
+            health: {
+                name: '건강 / 의료 / 영양제',
+                triggers: ['비타민', '영양제', '오메가', '유산균', '홍삼', '루테인', '콜라겐', '마스크', '밴드', '보호대', '안마기'],
+                target: ['부모님선물', '직장인', '수험생', '어르신', '가족건강', '임산부', '갱년기'],
+                trend: ['건강관리', '안전한', '믿을수있는', '필수템', '간편한', '활력'],
+                intent: ['추천', '비교', '가성비', '효과', '함량'],
+                autoNaver: ['부모님선물', '건강관리', '직장인', '수험생'],
+                autoOhouse: ['안전한', '믿을수있는', '필수템']
+            },
+            food: {
+                name: '식품 / 수산 / 신선',
+                triggers: ['사과', '고기', '수산', '고등어', '연어', '소고기', '돼지', '김치', '밀키트', '간식', '과자', '커피', '음료', '쌀', '과일'],
+                target: ['캠핑용', '아이간식', '술안주', '집들이음식', '홈파티', '1인식단', '명절선물'],
+                trend: ['제철', '산지직송', '신선한', '당일발송', '프리미엄', '무농약'],
+                intent: ['맛있는', '가성비', '추천', '대용량', '세트'],
+                autoNaver: ['산지직송', '제철', '캠핑용', '신선한'],
+                autoOhouse: ['홈파티', '간편한', '프리미엄']
+            },
+            fashion: {
+                name: '패션 / 의류 / 뷰티',
+                triggers: ['원피스', '티셔츠', '바지', '청바지', '스커트', '치마', '니트', '가디건', '패딩', '코트', '신발', '가방', '스킨', '크림'],
+                target: ['여성', '남성', '20대', '30대', '직장인', '학생', '하객룩', '데이트룩'],
+                trend: ['유행하는', '트렌디한', '데일리룩', '꾸안꾸', '핏이예쁜', '촉촉한'],
+                intent: ['가성비', '브랜드', '추천', '신상'],
+                autoNaver: ['데일리룩', '하객룩', '데이트룩', '신상'],
+                autoOhouse: ['트렌디한', '꾸안꾸', '핏이예쁜']
+            },
+            general: {
+                name: '공통 / 생활용품',
+                triggers: [], // 매칭 안될 때 기본값
+                target: ['선물용', '가족용', '나를위한', '답례품'],
+                trend: ['요즘뜨는', '인기있는', '트렌디한', '필수템', 'SNS대란'],
+                intent: ['가성비', '추천', '프리미엄', '비교'],
+                autoNaver: ['선물용', '필수템', '인기있는'],
+                autoOhouse: ['트렌디한', '감성', '인테리어']
+            }
+        };
+
+        function detectCategoryType(text) {
+            for (const [key, data] of Object.entries(categoryDict)) {
+                if (key === 'general') continue;
+                for (const trigger of data.triggers) {
+                    if (text.includes(trigger)) return key;
+                }
+            }
+            return 'general';
+        }
+
+        function filterWords(text, bannedList) {
+            let filtered = text;
+            bannedList.forEach(word => {
+                const regex = new RegExp(word, 'g');
+                filtered = filtered.replace(regex, '');
+            });
+            return filtered;
+        }
 
         function cleanText(text) {
             return text.replace(/\s+/g, ' ').trim();
         }
 
+        function removeDuplicates(text) {
+            const words = text.split(' ');
+            return [...new Set(words)].join(' ');
+        }
+
         function generateNames() {
-            const brand = document.getElementById('inputBrand').value.trim();
-            const main = document.getElementById('inputMain').value.trim(); 
-            const sub = document.getElementById('inputSub').value.trim();   
-            const opt = document.getElementById('inputOption').value.trim();
-            const mod = document.getElementById('inputMod').value.trim();   
+            let brand = document.getElementById('inputBrand').value.trim();
+            let main = document.getElementById('inputMain').value.trim();     // 시리즈
+            let cat = document.getElementById('inputCategory').value.trim();  // 카테고리
+            let opt = document.getElementById('inputOption').value.trim();    
+            let mod = document.getElementById('inputMod').value.trim();       
 
-            // 상품명 조합 로직
-            let naverRaw = `${brand} ${main} ${sub} ${opt}`;
-            let naverRes = cleanText(naverRaw.replace(/[\[\]\(\)\!\?\,]/g, ''));
+            if(!brand && !main && !cat) return;
+
+            // 산업군 자동 감지
+            let catType = detectCategoryType(cat);
+            let catData = categoryDict[catType];
+
+            /* -----------------------------------------
+               1. 네이버 스마트스토어 로직 (금지어 제거 + 자동 키워드 주입)
+            ----------------------------------------- */
+            let naverBase = cleanText(`${brand} ${main} ${cat} ${opt}`).replace(/[\[\]\(\)\!\?\,\-\/\~\_]/g, '');
+            naverBase = filterWords(naverBase, bannedWordsNaver);
             
-            let coupangRes = cleanText(`${brand} ${main} ${sub}${opt ? ', ' + opt : ''}`);
-            
-            let brandBracket = brand ? `[${brand}]` : '';
-            let optBracket = opt ? `(${opt})` : '';
-            let ohouseRes = cleanText(`${brandBracket} ${mod} ${main} ${sub} ${optBracket}`);
+            let autoN = catData.autoNaver[Math.floor(Math.random() * catData.autoNaver.length)];
+            let naverRes = naverBase;
+            if (cat && naverBase.length > 5 && naverBase.length + autoN.length + 1 <= 50) {
+                if (!naverBase.includes(autoN)) naverRes = `${naverBase} ${autoN}`; 
+            }
+            naverRes = removeDuplicates(cleanText(naverRes)); 
 
-            let generalRes = cleanText(`${brandBracket} ${main} ${sub} ${opt}`);
+            /* -----------------------------------------
+               2. 쿠팡 로직 (금지어 제거 + 특수문자 일부 허용)
+            ----------------------------------------- */
+            let coupangBase = cleanText(`${brand} ${main} ${cat} ${opt}`);
+            coupangBase = filterWords(coupangBase, bannedWordsCoupang);
+            let coupangRes = cleanText(coupangBase.replace(/[\[\]\(\)\!\?\~\_]/g, '')); 
 
-            // 화면 업데이트
+            /* -----------------------------------------
+               3. 오늘의집 로직 (감성 키워드 우선)
+            ----------------------------------------- */
+            let activeMod = mod;
+            if (!activeMod && cat) {
+                activeMod = catData.autoOhouse[Math.floor(Math.random() * catData.autoOhouse.length)];
+            }
+            let ohouseRes = cleanText(`[${brand}] ${activeMod} ${main} ${cat} ${opt}`);
+
+            /* -----------------------------------------
+               4. 종합몰 로직 (브랜드+시리즈+카테고리 초간결)
+            ----------------------------------------- */
+            let generalBase = cleanText(`[${brand}] ${main} ${cat}`);
+            let generalRes = cleanText(generalBase.replace(/[\(\)\!\?\,\-\/\~\_]/g, '')); 
+
+            /* -----------------------------------------
+               화면 업데이트 (상품명)
+            ----------------------------------------- */
             document.getElementById('outNaver').value = naverRes;
             document.getElementById('outCoupang').value = coupangRes;
             document.getElementById('outOhouse').value = ohouseRes;
             document.getElementById('outGeneral').value = generalRes;
 
             document.getElementById('lenNaver').innerText = `${naverRes.length} / 50자`;
-            document.getElementById('lenCoupang').innerText = `${coupangRes.length} 자`;
+            document.getElementById('lenCoupang').innerText = `${coupangRes.length} / 70자`;
             document.getElementById('lenOhouse').innerText = `${ohouseRes.length} 자`;
             document.getElementById('lenGeneral').innerText = `${generalRes.length} 자`;
 
-            const warnNaver = document.getElementById('warnNaver');
-            const lenNaverBadge = document.getElementById('lenNaver');
             if (naverRes.length > 50) {
-                warnNaver.classList.remove('hidden');
-                lenNaverBadge.classList.replace('bg-gray-100', 'bg-red-100');
-                lenNaverBadge.classList.replace('text-gray-600', 'text-red-600');
+                document.getElementById('warnNaver').classList.remove('hidden');
+                document.getElementById('lenNaver').classList.replace('bg-gray-100', 'bg-red-100');
+                document.getElementById('lenNaver').classList.replace('text-gray-600', 'text-red-600');
             } else {
-                warnNaver.classList.add('hidden');
-                lenNaverBadge.classList.replace('bg-red-100', 'bg-gray-100');
-                lenNaverBadge.classList.replace('text-red-600', 'text-gray-600');
+                document.getElementById('warnNaver').classList.add('hidden');
+                document.getElementById('lenNaver').classList.replace('bg-red-100', 'bg-gray-100');
+                document.getElementById('lenNaver').classList.replace('text-red-600', 'text-gray-600');
+            }
+
+            /* -----------------------------------------
+               💡 5. 자동 감지 키워드 추천 패널 업데이트
+            ----------------------------------------- */
+            const badgeEl = document.getElementById('detectedBadge');
+            const keywordContainer = document.getElementById('outKeywords');
+
+            if (cat) {
+                badgeEl.innerText = `현재 분석됨: ${catData.name}`;
+                badgeEl.classList.replace('bg-gray-100', 'bg-indigo-100');
+                badgeEl.classList.replace('text-gray-500', 'text-indigo-700');
+                badgeEl.classList.add('font-bold');
+
+                const targetKws = catData.target.map(w => w + ' ' + cat);
+                if (mod) targetKws.push(mod + ' ' + cat);
+                const trendKws = catData.trend.map(w => w + ' ' + cat);
+                const intentKws = catData.intent.map(w => cat + ' ' + w);
+
+                const renderBadge = (text, bgClass, textClass) => 
+                    `<span class="${bgClass} ${textClass} border border-transparent hover:border-current text-sm font-medium px-4 py-2 rounded-full shadow-sm cursor-pointer hover:opacity-80 transition active:scale-95" onclick="copyBadgeText('${text}')">${text}</span>`;
+
+                keywordContainer.innerHTML = `
+                    <div class="w-full">
+                        <h3 class="text-xs font-bold text-gray-500 mb-2">🎯 타겟/상황형 (넓은 검색 노출)</h3>
+                        <div class="flex flex-wrap gap-2">${targetKws.map(k => renderBadge(k, 'bg-blue-50', 'text-blue-700')).join('')}</div>
+                    </div>
+                    <div class="w-full border-t border-gray-200 pt-3 mt-1">
+                        <h3 class="text-xs font-bold text-gray-500 mb-2">✨ 트렌드/감성형 (클릭률 상승)</h3>
+                        <div class="flex flex-wrap gap-2">${trendKws.map(k => renderBadge(k, 'bg-pink-50', 'text-pink-700')).join('')}</div>
+                    </div>
+                    <div class="w-full border-t border-gray-200 pt-3 mt-1">
+                        <h3 class="text-xs font-bold text-gray-500 mb-2">🛒 구매의도형 (실제 구매자 전환)</h3>
+                        <div class="flex flex-wrap gap-2">${intentKws.map(k => renderBadge(k, 'bg-emerald-50', 'text-emerald-700')).join('')}</div>
+                    </div>
+                `;
+            } else {
+                badgeEl.innerText = `카테고리를 입력하세요`;
+                badgeEl.classList.replace('bg-indigo-100', 'bg-gray-100');
+                badgeEl.classList.replace('text-indigo-700', 'text-gray-500');
+                badgeEl.classList.remove('font-bold');
+                keywordContainer.innerHTML = `<span class="text-gray-400 text-sm text-center py-4">카테고리 칸에 '침대', '비타민', '원피스' 등 상품을 입력해 보세요.</span>`;
             }
         }
 
@@ -168,6 +332,21 @@
                 btnElement.innerText = originalText;
                 btnElement.classList.replace('bg-blue-600', 'bg-gray-800');
             }, 1500);
+        }
+
+        function copyBadgeText(text) {
+            navigator.clipboard.writeText(text);
+            const toast = document.getElementById('toastMsg');
+            const toastText = document.getElementById('toastText');
+            
+            toastText.innerText = `'${text}' 복사 완료!`;
+            toast.classList.remove('opacity-0');
+            toast.classList.add('-translate-y-2');
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                toast.classList.remove('-translate-y-2');
+            }, 2500);
         }
 
         window.onload = generateNames;
