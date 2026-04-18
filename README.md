@@ -25,14 +25,12 @@
 **엠솔디에이치(Msol DH)** | AMD | *2019.03 ~ 2020.07*
 - **Management:** 20개 이상 다채널 통합 관리 프로세스 수립 및 SCM 기반 재고 관리 시스템 안정화
 
-> 🔍 **[상세 경력 및 프로젝트 성과 보기](./experience/README.md)**
-
 ---
 
 ## 🛠 Side Projects
 실무의 문제 해결을 위해 직접 기획하고 구현한 도구들입니다.
 - **[통합 채널 프라이싱 대시보드](https://github.com/Marble-joo/md-workspace):** 채널별 수수료를 반영한 실시간 마진 시뮬레이션 툴
-- **상품 트렌드 검색 자동화 (진행 중):** 다채널 키워드 데이터 수집기
+- **상품명 자동완성:** [다채널 키워드 데이터 수집기](https://career-archive-liard.vercel.app/)
 
 ---
 ## 📫 Contact
