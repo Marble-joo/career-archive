@@ -87,11 +87,12 @@
             </div>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-yellow-400 mt-6">
-            <h2 class="text-lg font-bold text-gray-800 mb-1">💡 관련 키워드 추천 (해시태그)</h2>
-            <p class="text-xs text-gray-500 mb-4">'상품명칭'과 '상품특징'을 조합한 검색어입니다. 상세페이지 태그로 활용해 보세요.</p>
-            <div id="outKeywords" class="flex flex-wrap gap-2">
-                <span class="text-gray-400 text-sm">상품명칭과 상품특징을 입력하면 연관 해시태그가 생성됩니다.</span>
+        <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-yellow-400 mt-6 relative">
+            <div id="toastMsg" class="absolute top-4 right-6 bg-gray-800 text-white text-xs px-3 py-2 rounded opacity-0 transition-opacity duration-300 pointer-events-none">복사되었습니다!</div>
+            <h2 class="text-lg font-bold text-gray-800 mb-1">💡 쇼핑 고효율 확장 키워드</h2>
+            <p class="text-xs text-gray-500 mb-4">상품명에 추가하면 검색 노출을 극대화할 수 있는 광범위 키워드입니다. (클릭하면 복사됩니다)</p>
+            <div id="outKeywords" class="flex flex-col gap-4">
+                <span class="text-gray-400 text-sm mt-2">시리즈명 또는 상품명칭을 입력하면 쇼핑 고효율 키워드가 생성됩니다.</span>
             </div>
         </div>
 
@@ -109,12 +110,12 @@
 
         function generateNames() {
             const brand = document.getElementById('inputBrand').value.trim();
-            const main = document.getElementById('inputMain').value.trim();
-            const sub = document.getElementById('inputSub').value.trim(); // 상품명칭
+            const main = document.getElementById('inputMain').value.trim(); // 시리즈명
+            const sub = document.getElementById('inputSub').value.trim();   // 상품명칭
             const opt = document.getElementById('inputOption').value.trim();
-            const mod = document.getElementById('inputMod').value.trim(); // 상품특징
+            const mod = document.getElementById('inputMod').value.trim();   // 상품특징
 
-            // 채널별 로직
+            // 1. 메인 상품명 채널별 로직
             let naverRaw = `${brand} ${main} ${sub} ${opt}`;
             let naverRes = cleanText(naverRaw.replace(/[\[\]\(\)\!\?\,]/g, ''));
             
@@ -126,7 +127,7 @@
 
             let generalRes = cleanText(`${brandBracket} ${main} ${sub} ${opt}`);
 
-            // 화면 업데이트
+            // 2. 화면 업데이트 (상품명)
             document.getElementById('outNaver').value = naverRes;
             document.getElementById('outCoupang').value = coupangRes;
             document.getElementById('outOhouse').value = ohouseRes;
@@ -149,42 +150,46 @@
                 lenNaverBadge.classList.replace('text-red-600', 'text-gray-600');
             }
 
-            // 💡 관련 키워드 생성 로직
+            // 3. 💡 확장 키워드 생성 로직 (분류별 생성)
             const keywordContainer = document.getElementById('outKeywords');
-            keywordContainer.innerHTML = ''; // 기존 태그 초기화
+            keywordContainer.innerHTML = ''; 
 
-            if (sub || mod) {
-                let tags = new Set();
-                
-                // 단어 쪼개기
-                const subWords = sub.split(/\s+/).filter(w => w.length > 0);
-                const modWords = mod.split(/\s+/).filter(w => w.length > 0);
+            const baseWord = sub || main || ''; // 상품명칭이 없으면 시리즈명으로 대체
 
-                // 기본 단어 추가
-                subWords.forEach(w => tags.add('#' + w));
-                modWords.forEach(w => tags.add('#' + w));
+            if (baseWord) {
+                // 카테고리 1: 타겟/상황형 (검색 모수가 큼)
+                const targetKws = ['신혼', '1인가구', '원룸', '자취방', '아이방', '입주'].map(w => w + ' ' + baseWord);
+                if (mod) targetKws.push(mod + ' ' + baseWord);
 
-                // 단어 조합 추가
-                if(subWords.length > 0 && modWords.length > 0) {
-                    tags.add('#' + modWords[0] + subWords[0]); 
-                }
-                if(subWords.length > 0) {
-                    tags.add('#' + subWords[0] + '추천');
-                    tags.add('#가성비' + subWords[0]);
-                }
+                // 카테고리 2: 트렌드/감성형 (클릭률 유도)
+                const trendKws = ['감성', '미니멀', '모던', '오늘의집', '홈인테리어', '디자인'].map(w => w + ' ' + baseWord);
 
-                // 태그 화면에 그리기
-                tags.forEach(tag => {
-                    const span = document.createElement('span');
-                    span.className = 'bg-yellow-100 text-yellow-800 text-sm font-semibold px-3 py-1.5 rounded-full shadow-sm';
-                    span.innerText = tag;
-                    keywordContainer.appendChild(span);
-                });
+                // 카테고리 3: 구매의도형 (전환율 타겟)
+                const intentKws = ['가성비', '튼튼한', '프리미엄', baseWord + ' 추천', baseWord + ' 브랜드'];
+
+                const renderBadge = (text, bgClass, textClass) => 
+                    `<span class="${bgClass} ${textClass} text-sm font-medium px-3 py-1.5 rounded-full shadow-sm cursor-pointer hover:opacity-70 transition active:scale-95" onclick="copyBadgeText('${text}')">${text}</span>`;
+
+                keywordContainer.innerHTML = `
+                    <div class="w-full">
+                        <h3 class="text-xs font-bold text-gray-500 mb-2">🎯 타겟/상황형 (넓은 검색 노출)</h3>
+                        <div class="flex flex-wrap gap-2">${targetKws.map(k => renderBadge(k, 'bg-blue-50', 'text-blue-700')).join('')}</div>
+                    </div>
+                    <div class="w-full border-t border-gray-100 pt-3">
+                        <h3 class="text-xs font-bold text-gray-500 mb-2">✨ 트렌드/감성형 (클릭률 상승)</h3>
+                        <div class="flex flex-wrap gap-2">${trendKws.map(k => renderBadge(k, 'bg-pink-50', 'text-pink-700')).join('')}</div>
+                    </div>
+                    <div class="w-full border-t border-gray-100 pt-3">
+                        <h3 class="text-xs font-bold text-gray-500 mb-2">🛒 구매의도형 (실제 구매자 전환)</h3>
+                        <div class="flex flex-wrap gap-2">${intentKws.map(k => renderBadge(k, 'bg-emerald-50', 'text-emerald-700')).join('')}</div>
+                    </div>
+                `;
             } else {
-                keywordContainer.innerHTML = '<span class="text-gray-400 text-sm">상품명칭과 상품특징을 입력하면 연관 해시태그가 생성됩니다.</span>';
+                keywordContainer.innerHTML = '<span class="text-gray-400 text-sm mt-2">시리즈명 또는 상품명칭을 입력하면 쇼핑 고효율 키워드가 생성됩니다.</span>';
             }
         }
 
+        // 전체 텍스트 복사 함수 (상품명 복사용)
         function copyText(inputId, btnElement) {
             const copyText = document.getElementById(inputId);
             copyText.select();
@@ -198,6 +203,18 @@
             setTimeout(() => {
                 btnElement.innerText = originalText;
                 btnElement.classList.replace('bg-blue-600', 'bg-gray-800');
+            }, 1500);
+        }
+
+        // 단일 배지 텍스트 복사 함수 (확장 키워드 복사용)
+        function copyBadgeText(text) {
+            navigator.clipboard.writeText(text);
+            const toast = document.getElementById('toastMsg');
+            toast.innerText = `'${text}' 복사됨!`;
+            toast.classList.remove('opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
             }, 1500);
         }
 
