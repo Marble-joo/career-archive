@@ -16,28 +16,27 @@
         <div class="bg-white p-6 rounded-lg shadow-sm mb-6 grid grid-cols-1 md:grid-cols-5 gap-4">
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">브랜드명</label>
-                <input type="text" id="inputBrand" value="이노센트" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="예: 이노센트">
+                <input type="text" id="inputBrand" value="" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="브랜드명">
             </div>
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">메인 키워드</label>
-                <input type="text" id="inputMain" value="수납 침대" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="예: 수납 침대">
+                <input type="text" id="inputMain" value="" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="시리즈명">
             </div>
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">속성/서브 키워드</label>
-                <input type="text" id="inputSub" value="LED 프레임" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="예: LED 프레임">
+                <input type="text" id="inputSub" value="" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="상품명칭">
             </div>
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">옵션/사이즈</label>
-                <input type="text" id="inputOption" value="SS 화이트" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="예: SS 화이트">
+                <input type="text" id="inputOption" value="" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="옵션명">
             </div>
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">감성/홍보 수식어</label>
-                <input type="text" id="inputMod" value="공간활용 만점" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="예: 공간활용">
+                <input type="text" id="inputMod" value="" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="상품특징">
             </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
             <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
                 <div class="flex justify-between items-center mb-3">
                     <h2 class="text-lg font-bold text-gray-800">🟢 네이버 스마트스토어</h2>
@@ -86,64 +85,58 @@
                     <button onclick="copyText('outGeneral', this)" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm whitespace-nowrap transition">복사</button>
                 </div>
             </div>
-
         </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-yellow-400 mt-6">
+            <h2 class="text-lg font-bold text-gray-800 mb-1">💡 관련 키워드 추천 (해시태그)</h2>
+            <p class="text-xs text-gray-500 mb-4">'상품명칭'과 '상품특징'을 조합한 검색어입니다. 상세페이지 태그로 활용해 보세요.</p>
+            <div id="outKeywords" class="flex flex-wrap gap-2">
+                <span class="text-gray-400 text-sm">상품명칭과 상품특징을 입력하면 연관 해시태그가 생성됩니다.</span>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // 입력 필드 이벤트 리스너 등록 (타이핑할 때마다 generateNames 함수 실행)
         const inputs = ['inputBrand', 'inputMain', 'inputSub', 'inputOption', 'inputMod'];
         inputs.forEach(id => {
             document.getElementById(id).addEventListener('input', generateNames);
         });
 
-        // 텍스트 다듬기 함수 (여러 개의 공백을 하나로)
         function cleanText(text) {
             return text.replace(/\s+/g, ' ').trim();
         }
 
         function generateNames() {
-            // 1. 입력값 가져오기
             const brand = document.getElementById('inputBrand').value.trim();
             const main = document.getElementById('inputMain').value.trim();
-            const sub = document.getElementById('inputSub').value.trim();
+            const sub = document.getElementById('inputSub').value.trim(); // 상품명칭
             const opt = document.getElementById('inputOption').value.trim();
-            const mod = document.getElementById('inputMod').value.trim();
+            const mod = document.getElementById('inputMod').value.trim(); // 상품특징
 
-            /* ==========================================
-               💡 나중에 여기서 채널별 규칙을 수정하세요! 
-               ========================================== */
-            
-            // 네이버: 특수문자 대괄호, 괄호 등 제거
+            // 채널별 로직
             let naverRaw = `${brand} ${main} ${sub} ${opt}`;
             let naverRes = cleanText(naverRaw.replace(/[\[\]\(\)\!\?\,]/g, ''));
             
-            // 쿠팡: 옵션 앞에 콤마(,) 추가
             let coupangRes = cleanText(`${brand} ${main} ${sub}${opt ? ', ' + opt : ''}`);
             
-            // 오늘의집: 브랜드에 대괄호, 옵션에 소괄호, 맨 앞에 감성 수식어
             let brandBracket = brand ? `[${brand}]` : '';
             let optBracket = opt ? `(${opt})` : '';
             let ohouseRes = cleanText(`${brandBracket} ${mod} ${main} ${sub} ${optBracket}`);
 
-            // 종합몰: 브랜드에 대괄호
             let generalRes = cleanText(`${brandBracket} ${main} ${sub} ${opt}`);
 
-            /* ========================================== */
-
-            // 2. 화면에 결과 텍스트 뿌려주기
+            // 화면 업데이트
             document.getElementById('outNaver').value = naverRes;
             document.getElementById('outCoupang').value = coupangRes;
             document.getElementById('outOhouse').value = ohouseRes;
             document.getElementById('outGeneral').value = generalRes;
 
-            // 3. 글자 수 카운팅 및 화면 업데이트
             document.getElementById('lenNaver').innerText = `${naverRes.length} / 50자`;
             document.getElementById('lenCoupang').innerText = `${coupangRes.length} 자`;
             document.getElementById('lenOhouse').innerText = `${ohouseRes.length} 자`;
             document.getElementById('lenGeneral').innerText = `${generalRes.length} 자`;
 
-            // 네이버 50자 초과 시 경고 표시 로직
             const warnNaver = document.getElementById('warnNaver');
             const lenNaverBadge = document.getElementById('lenNaver');
             if (naverRes.length > 50) {
@@ -155,16 +148,49 @@
                 lenNaverBadge.classList.replace('bg-red-100', 'bg-gray-100');
                 lenNaverBadge.classList.replace('text-red-600', 'text-gray-600');
             }
+
+            // 💡 관련 키워드 생성 로직
+            const keywordContainer = document.getElementById('outKeywords');
+            keywordContainer.innerHTML = ''; // 기존 태그 초기화
+
+            if (sub || mod) {
+                let tags = new Set();
+                
+                // 단어 쪼개기
+                const subWords = sub.split(/\s+/).filter(w => w.length > 0);
+                const modWords = mod.split(/\s+/).filter(w => w.length > 0);
+
+                // 기본 단어 추가
+                subWords.forEach(w => tags.add('#' + w));
+                modWords.forEach(w => tags.add('#' + w));
+
+                // 단어 조합 추가
+                if(subWords.length > 0 && modWords.length > 0) {
+                    tags.add('#' + modWords[0] + subWords[0]); 
+                }
+                if(subWords.length > 0) {
+                    tags.add('#' + subWords[0] + '추천');
+                    tags.add('#가성비' + subWords[0]);
+                }
+
+                // 태그 화면에 그리기
+                tags.forEach(tag => {
+                    const span = document.createElement('span');
+                    span.className = 'bg-yellow-100 text-yellow-800 text-sm font-semibold px-3 py-1.5 rounded-full shadow-sm';
+                    span.innerText = tag;
+                    keywordContainer.appendChild(span);
+                });
+            } else {
+                keywordContainer.innerHTML = '<span class="text-gray-400 text-sm">상품명칭과 상품특징을 입력하면 연관 해시태그가 생성됩니다.</span>';
+            }
         }
 
-        // 복사 기능 함수
         function copyText(inputId, btnElement) {
             const copyText = document.getElementById(inputId);
             copyText.select();
-            copyText.setSelectionRange(0, 99999); // 모바일 호환성
+            copyText.setSelectionRange(0, 99999);
             navigator.clipboard.writeText(copyText.value);
 
-            // 버튼 글자 변경 애니메이션
             const originalText = btnElement.innerText;
             btnElement.innerText = "복사 완료!";
             btnElement.classList.replace('bg-gray-800', 'bg-blue-600');
@@ -175,7 +201,6 @@
             }, 1500);
         }
 
-        // 페이지 로드 시 최초 1회 실행
         window.onload = generateNames;
     </script>
 </body>
