@@ -15,14 +15,14 @@
             </div>
             <a href="https://ma-pia.net/keyword/keyword.php" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold px-5 py-2.5 rounded shadow-md transition flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                관련 키워드 확인
+                관련키워드 더보기
             </a>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow-sm mb-6 grid grid-cols-1 md:grid-cols-5 gap-4 bg-indigo-50/30">
+        <div class="bg-white p-6 rounded-lg shadow-sm mb-6 grid grid-cols-2 lg:grid-cols-6 gap-4 bg-indigo-50/30">
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">브랜드명</label>
-                <input type="text" id="inputBrand" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="이노센트">
+                <input type="text" id="inputBrand" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="브랜드명">
             </div>
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">시리즈명 (메인)</label>
@@ -30,7 +30,7 @@
             </div>
             <div>
                 <label class="block text-sm font-bold text-indigo-700 mb-1">카테고리 (자동감지✨)</label>
-                <input type="text" id="inputCategory" class="w-full border-indigo-400 rounded border-2 p-2 focus:ring-2 focus:ring-indigo-600 outline-none shadow-sm" placeholder="예: 수납 침대, 비타민, 원피스">
+                <input type="text" id="inputCategory" class="w-full border-indigo-400 rounded border-2 p-2 focus:ring-2 focus:ring-indigo-600 outline-none shadow-sm" placeholder="예: 수납 침대, 비타민">
             </div>
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">옵션/사이즈</label>
@@ -39,6 +39,10 @@
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">상품특징 (스타일)</label>
                 <input type="text" id="inputMod" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="상품특징">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">모델코드</label>
+                <input type="text" id="inputModel" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="모델코드">
             </div>
         </div>
 
@@ -100,7 +104,7 @@
                 <span class="bg-yellow-400 text-gray-900 text-xs px-2 py-1 rounded">마피아에 검색하세요</span>
             </div>
 
-            <div class="flex justify-between items-end mb-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-4 gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-gray-800 mb-1 flex items-center gap-2">
                         💡 AI 자동 추천 키워드 
@@ -108,6 +112,9 @@
                     </h2>
                     <p class="text-sm text-gray-500">카테고리를 입력하면 산업군을 자동 분석하여 클릭률이 높은 키워드를 추천합니다. (배지 클릭 시 복사)</p>
                 </div>
+                <a href="https://ma-pia.net/keyword/keyword.php" target="_blank" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 text-sm font-bold px-4 py-2 rounded shadow-sm transition flex items-center gap-2 whitespace-nowrap border border-indigo-200">
+                    🔍 관련키워드 더보기
+                </a>
             </div>
 
             <div id="outKeywords" class="flex flex-col gap-4 mt-4 bg-gray-50 p-4 rounded border border-gray-100">
@@ -118,16 +125,17 @@
     </div>
 
     <script>
-        const inputs = ['inputBrand', 'inputMain', 'inputCategory', 'inputOption', 'inputMod'];
+        // inputModel 요소 추가됨
+        const inputs = ['inputBrand', 'inputMain', 'inputCategory', 'inputOption', 'inputMod', 'inputModel'];
         inputs.forEach(id => {
             document.getElementById(id).addEventListener('input', generateNames);
         });
 
-        // 1. 공통 금지어 사전 (입력값에서 자동 삭제)
+        // 1. 공통 금지어 사전
         const bannedWordsNaver = ['최저가', '1위', '추천', '특가', '할인', '세일', '무료배송', '당일출고', '사은품'];
         const bannedWordsCoupang = ['무료배송', '당일출고', '특가', '세일', '최저가', '사은품', '이벤트'];
 
-        // 2. 🌟 산업군별 자동 감지 사전 (핵심 기술) 🌟
+        // 2. 산업군별 자동 감지 사전
         const categoryDict = {
             furniture: {
                 name: '가구 / 홈인테리어',
@@ -167,7 +175,7 @@
             },
             general: {
                 name: '공통 / 생활용품',
-                triggers: [], // 매칭 안될 때 기본값
+                triggers: [], 
                 target: ['선물용', '가족용', '나를위한', '답례품'],
                 trend: ['요즘뜨는', '인기있는', '트렌디한', '필수템', 'SNS대란'],
                 intent: ['가성비', '추천', '프리미엄', '비교'],
@@ -206,20 +214,18 @@
 
         function generateNames() {
             let brand = document.getElementById('inputBrand').value.trim();
-            let main = document.getElementById('inputMain').value.trim();     // 시리즈
-            let cat = document.getElementById('inputCategory').value.trim();  // 카테고리
+            let main = document.getElementById('inputMain').value.trim();     
+            let cat = document.getElementById('inputCategory').value.trim();  
             let opt = document.getElementById('inputOption').value.trim();    
             let mod = document.getElementById('inputMod').value.trim();       
+            let modelCode = document.getElementById('inputModel').value.trim(); // 💡 모델코드 추가
 
-            if(!brand && !main && !cat) return;
+            if(!brand && !main && !cat && !modelCode) return;
 
-            // 산업군 자동 감지
             let catType = detectCategoryType(cat);
             let catData = categoryDict[catType];
 
-            /* -----------------------------------------
-               1. 네이버 스마트스토어 로직 (금지어 제거 + 자동 키워드 주입)
-            ----------------------------------------- */
+            /* --- 1. 네이버 로직 --- */
             let naverBase = cleanText(`${brand} ${main} ${cat} ${opt}`).replace(/[\[\]\(\)\!\?\,\-\/\~\_]/g, '');
             naverBase = filterWords(naverBase, bannedWordsNaver);
             
@@ -229,32 +235,28 @@
                 if (!naverBase.includes(autoN)) naverRes = `${naverBase} ${autoN}`; 
             }
             naverRes = removeDuplicates(cleanText(naverRes)); 
+            if (modelCode) naverRes = cleanText(`${naverRes} ${modelCode}`); // 💡 마지막에 모델코드 병합
 
-            /* -----------------------------------------
-               2. 쿠팡 로직 (금지어 제거 + 특수문자 일부 허용)
-            ----------------------------------------- */
+            /* --- 2. 쿠팡 로직 --- */
             let coupangBase = cleanText(`${brand} ${main} ${cat} ${opt}`);
             coupangBase = filterWords(coupangBase, bannedWordsCoupang);
             let coupangRes = cleanText(coupangBase.replace(/[\[\]\(\)\!\?\~\_]/g, '')); 
+            if (modelCode) coupangRes = cleanText(`${coupangRes} ${modelCode}`); // 💡 마지막에 모델코드 병합
 
-            /* -----------------------------------------
-               3. 오늘의집 로직 (감성 키워드 우선)
-            ----------------------------------------- */
+            /* --- 3. 오늘의집 로직 --- */
             let activeMod = mod;
             if (!activeMod && cat) {
                 activeMod = catData.autoOhouse[Math.floor(Math.random() * catData.autoOhouse.length)];
             }
             let ohouseRes = cleanText(`[${brand}] ${activeMod} ${main} ${cat} ${opt}`);
+            if (modelCode) ohouseRes = cleanText(`${ohouseRes} ${modelCode}`); // 💡 마지막에 모델코드 병합
 
-            /* -----------------------------------------
-               4. 종합몰 로직 (브랜드+시리즈+카테고리 초간결)
-            ----------------------------------------- */
+            /* --- 4. 종합몰 로직 --- */
             let generalBase = cleanText(`[${brand}] ${main} ${cat}`);
             let generalRes = cleanText(generalBase.replace(/[\(\)\!\?\,\-\/\~\_]/g, '')); 
+            if (modelCode) generalRes = cleanText(`${generalRes} ${modelCode}`); // 💡 마지막에 모델코드 병합
 
-            /* -----------------------------------------
-               화면 업데이트 (상품명)
-            ----------------------------------------- */
+            /* --- 화면 업데이트 --- */
             document.getElementById('outNaver').value = naverRes;
             document.getElementById('outCoupang').value = coupangRes;
             document.getElementById('outOhouse').value = ohouseRes;
@@ -275,9 +277,7 @@
                 document.getElementById('lenNaver').classList.replace('text-red-600', 'text-gray-600');
             }
 
-            /* -----------------------------------------
-               💡 5. 자동 감지 키워드 추천 패널 업데이트
-            ----------------------------------------- */
+            /* --- 5. 자동 감지 키워드 추천 패널 --- */
             const badgeEl = document.getElementById('detectedBadge');
             const keywordContainer = document.getElementById('outKeywords');
 
