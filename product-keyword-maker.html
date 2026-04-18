@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>채널 통합 SEO 상품명 조합기</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8 font-sans">
+    <div class="max-w-5xl mx-auto">
+        <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+            <h1 class="text-2xl font-bold text-gray-800 mb-2">채널 통합 SEO 상품명 조합기</h1>
+            <p class="text-gray-500 text-sm">입력한 키워드를 바탕으로 각 플랫폼 규칙에 맞는 상품명을 자동 완성합니다.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-sm mb-6 grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">브랜드명</label>
+                <input type="text" id="inputBrand" value="이노센트" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="예: 이노센트">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">메인 키워드</label>
+                <input type="text" id="inputMain" value="수납 침대" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="예: 수납 침대">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">속성/서브 키워드</label>
+                <input type="text" id="inputSub" value="LED 프레임" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="예: LED 프레임">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">옵션/사이즈</label>
+                <input type="text" id="inputOption" value="SS 화이트" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="예: SS 화이트">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">감성/홍보 수식어</label>
+                <input type="text" id="inputMod" value="공간활용 만점" class="w-full border-gray-300 rounded border p-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="예: 공간활용">
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-lg font-bold text-gray-800">🟢 네이버 스마트스토어</h2>
+                    <span id="lenNaver" class="text-sm font-semibold px-2 py-1 rounded bg-gray-100 text-gray-600">0 / 50자</span>
+                </div>
+                <p class="text-xs text-gray-500 mb-2">규칙: 특수문자 금지, 검색 최적화, 50자 이내 권장</p>
+                <div class="flex gap-2">
+                    <input type="text" id="outNaver" class="w-full border-gray-200 rounded border p-3 bg-gray-50 text-gray-800 font-medium" readonly>
+                    <button onclick="copyText('outNaver', this)" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm whitespace-nowrap transition">복사</button>
+                </div>
+                <p id="warnNaver" class="text-red-500 text-xs mt-2 hidden">⚠️ 네이버 SEO 권장 글자 수(50자)를 초과했습니다!</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-red-500">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-lg font-bold text-gray-800">🔴 쿠팡 (로켓/윙)</h2>
+                    <span id="lenCoupang" class="text-sm font-semibold px-2 py-1 rounded bg-gray-100 text-gray-600">0 자</span>
+                </div>
+                <p class="text-xs text-gray-500 mb-2">규칙: 브랜드 + 상품명 + 콤마(,) + 옵션</p>
+                <div class="flex gap-2">
+                    <input type="text" id="outCoupang" class="w-full border-gray-200 rounded border p-3 bg-gray-50 text-gray-800 font-medium" readonly>
+                    <button onclick="copyText('outCoupang', this)" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm whitespace-nowrap transition">복사</button>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-blue-500">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-lg font-bold text-gray-800">🏠 오늘의집</h2>
+                    <span id="lenOhouse" class="text-sm font-semibold px-2 py-1 rounded bg-gray-100 text-gray-600">0 자</span>
+                </div>
+                <p class="text-xs text-gray-500 mb-2">규칙: [브랜드] + 감성수식어 + 상품명 + (옵션)</p>
+                <div class="flex gap-2">
+                    <input type="text" id="outOhouse" class="w-full border-gray-200 rounded border p-3 bg-gray-50 text-gray-800 font-medium" readonly>
+                    <button onclick="copyText('outOhouse', this)" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm whitespace-nowrap transition">복사</button>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-purple-500">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-lg font-bold text-gray-800">🟣 종합몰 (롯데온/SSG 등)</h2>
+                    <span id="lenGeneral" class="text-sm font-semibold px-2 py-1 rounded bg-gray-100 text-gray-600">0 자</span>
+                </div>
+                <p class="text-xs text-gray-500 mb-2">규칙: [브랜드] + 메인 키워드 + 속성 + 옵션</p>
+                <div class="flex gap-2">
+                    <input type="text" id="outGeneral" class="w-full border-gray-200 rounded border p-3 bg-gray-50 text-gray-800 font-medium" readonly>
+                    <button onclick="copyText('outGeneral', this)" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm whitespace-nowrap transition">복사</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // 입력 필드 이벤트 리스너 등록 (타이핑할 때마다 generateNames 함수 실행)
+        const inputs = ['inputBrand', 'inputMain', 'inputSub', 'inputOption', 'inputMod'];
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', generateNames);
+        });
+
+        // 텍스트 다듬기 함수 (여러 개의 공백을 하나로)
+        function cleanText(text) {
+            return text.replace(/\s+/g, ' ').trim();
+        }
+
+        function generateNames() {
+            // 1. 입력값 가져오기
+            const brand = document.getElementById('inputBrand').value.trim();
+            const main = document.getElementById('inputMain').value.trim();
+            const sub = document.getElementById('inputSub').value.trim();
+            const opt = document.getElementById('inputOption').value.trim();
+            const mod = document.getElementById('inputMod').value.trim();
+
+            /* ==========================================
+               💡 나중에 여기서 채널별 규칙을 수정하세요! 
+               ========================================== */
+            
+            // 네이버: 특수문자 대괄호, 괄호 등 제거
+            let naverRaw = `${brand} ${main} ${sub} ${opt}`;
+            let naverRes = cleanText(naverRaw.replace(/[\[\]\(\)\!\?\,]/g, ''));
+            
+            // 쿠팡: 옵션 앞에 콤마(,) 추가
+            let coupangRes = cleanText(`${brand} ${main} ${sub}${opt ? ', ' + opt : ''}`);
+            
+            // 오늘의집: 브랜드에 대괄호, 옵션에 소괄호, 맨 앞에 감성 수식어
+            let brandBracket = brand ? `[${brand}]` : '';
+            let optBracket = opt ? `(${opt})` : '';
+            let ohouseRes = cleanText(`${brandBracket} ${mod} ${main} ${sub} ${optBracket}`);
+
+            // 종합몰: 브랜드에 대괄호
+            let generalRes = cleanText(`${brandBracket} ${main} ${sub} ${opt}`);
+
+            /* ========================================== */
+
+            // 2. 화면에 결과 텍스트 뿌려주기
+            document.getElementById('outNaver').value = naverRes;
+            document.getElementById('outCoupang').value = coupangRes;
+            document.getElementById('outOhouse').value = ohouseRes;
+            document.getElementById('outGeneral').value = generalRes;
+
+            // 3. 글자 수 카운팅 및 화면 업데이트
+            document.getElementById('lenNaver').innerText = `${naverRes.length} / 50자`;
+            document.getElementById('lenCoupang').innerText = `${coupangRes.length} 자`;
+            document.getElementById('lenOhouse').innerText = `${ohouseRes.length} 자`;
+            document.getElementById('lenGeneral').innerText = `${generalRes.length} 자`;
+
+            // 네이버 50자 초과 시 경고 표시 로직
+            const warnNaver = document.getElementById('warnNaver');
+            const lenNaverBadge = document.getElementById('lenNaver');
+            if (naverRes.length > 50) {
+                warnNaver.classList.remove('hidden');
+                lenNaverBadge.classList.replace('bg-gray-100', 'bg-red-100');
+                lenNaverBadge.classList.replace('text-gray-600', 'text-red-600');
+            } else {
+                warnNaver.classList.add('hidden');
+                lenNaverBadge.classList.replace('bg-red-100', 'bg-gray-100');
+                lenNaverBadge.classList.replace('text-red-600', 'text-gray-600');
+            }
+        }
+
+        // 복사 기능 함수
+        function copyText(inputId, btnElement) {
+            const copyText = document.getElementById(inputId);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // 모바일 호환성
+            navigator.clipboard.writeText(copyText.value);
+
+            // 버튼 글자 변경 애니메이션
+            const originalText = btnElement.innerText;
+            btnElement.innerText = "복사 완료!";
+            btnElement.classList.replace('bg-gray-800', 'bg-blue-600');
+            
+            setTimeout(() => {
+                btnElement.innerText = originalText;
+                btnElement.classList.replace('bg-blue-600', 'bg-gray-800');
+            }, 1500);
+        }
+
+        // 페이지 로드 시 최초 1회 실행
+        window.onload = generateNames;
+    </script>
+</body>
+</html>
