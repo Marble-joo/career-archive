@@ -1,391 +1,391 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>상품 진단 시스템</title>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      padding: 32px;
-      font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f1f5f9;
-      color: #0f172a;
-    }
-    .container { max-width: 1440px; margin: 0 auto; }
-    h1 { font-size: 40px; margin: 0 0 8px; letter-spacing: -0.04em; }
-    .sub { margin: 0 0 28px; color: #64748b; font-size: 17px; }
-    .upload-box, .card, .table-wrap {
-      background: #fff;
-      border-radius: 24px;
-      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
-    }
-    .upload-box { padding: 24px; margin-bottom: 24px; }
-    .upload-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .upload-box h2 { margin: 0 0 8px; font-size: 22px; }
-    .guide { margin: 4px 0; color: #64748b; font-size: 14px; line-height: 1.6; }
-    .buttons { display: flex; gap: 10px; flex-wrap: wrap; }
-    .btn {
-      border: 0;
-      border-radius: 16px;
-      padding: 13px 18px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 14px;
-    }
-    .btn-primary { background: #0f172a; color: #fff; }
-    .btn-secondary { background: #f1f5f9; color: #334155; }
-    input[type="file"] { display: none; }
-    .error {
-      margin-top: 16px;
-      padding: 14px 16px;
-      border-radius: 16px;
-      background: #fef2f2;
-      color: #b91c1c;
-      font-weight: 600;
-      display: none;
-    }
-    .summary {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(140px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .card { padding: 22px; }
-    .card-title { color: #64748b; font-size: 14px; margin: 0 0 10px; }
-    .card-value { font-size: 36px; font-weight: 800; margin: 0; }
-    .green { color: #16a34a; }
-    .yellow { color: #ca8a04; }
-    .red { color: #dc2626; }
-    .slate { color: #334155; }
-    .table-wrap { overflow: hidden; }
-    .scroll { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 1280px; }
-    th, td { padding: 15px 14px; border-bottom: 1px solid #e2e8f0; text-align: left; vertical-align: top; }
-    th { background: #f8fafc; color: #475569; font-weight: 800; white-space: nowrap; }
-    tr:hover { background: #f8fafc; }
-    .right { text-align: right; }
-    .product-name { font-weight: 800; min-width: 180px; }
-    .code { color: #64748b; font-weight: 700; }
-    .badge {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-    .badge-normal { background: #dcfce7; color: #15803d; }
-    .badge-warning { background: #fef3c7; color: #a16207; }
-    .badge-danger { background: #fee2e2; color: #b91c1c; }
-    .actions { min-width: 240px; color: #475569; line-height: 1.55; }
-    .actions ul { margin: 0; padding-left: 18px; }
-    .negative { color: #ef4444; font-weight: 800; }
-    .positive { color: #16a34a; font-weight: 800; }
-    @media (max-width: 900px) {
-      body { padding: 20px; }
-      h1 { font-size: 32px; }
-      .summary { grid-template-columns: repeat(2, 1fr); }
-      .upload-row { align-items: stretch; }
-    }
-  </style>
-</head>
-<body>
-  <main class="container">
-    <section>
-      <h1>상품 진단 시스템</h1>
-      <p class="sub">원천 데이터를 업로드하면 매출증감률, 전환율, 문의증가수, ROAS, 리스크 점수를 자동 계산합니다.</p>
-    </section>
+import React, { useMemo, useState } from "react";
+import * as XLSX from "xlsx";
 
-    <section class="upload-box">
-      <div class="upload-row">
-        <div>
-          <h2>파일 업로드 분석</h2>
-          <p class="guide">필수 컬럼: 상품코드, 상품명, 채널, 전월매출, 당월매출, 전월주문수, 당월주문수, 방문수, 재고, 전월별점, 당월별점, 전월문의수, 당월문의수, 광고비, 광고매출</p>
-          <p class="guide" id="fileName">현재 데이터: 샘플 데이터 사용 중</p>
-          <p class="guide">리스크 점수는 0~100점 기준이며, 점수가 높을수록 운영 리스크가 큽니다. 0~29 정상 / 30~59 주의 / 60 이상 긴급 관리</p>
-        </div>
-        <div class="buttons">
-          <label class="btn btn-primary" for="fileInput">CSV/엑셀 업로드</label>
-          <input id="fileInput" type="file" accept=".csv,.xlsx,.xls" />
-          <button class="btn btn-secondary" onclick="resetSampleData()">샘플 데이터로 초기화</button>
-        </div>
-      </div>
-      <div class="error" id="errorBox"></div>
-    </section>
+export default function ProductHealthCheckPreview() {
+  const [products, setProducts] = useState([]);
+  const [fileName, setFileName] = useState("업로드된 파일 없음");
+  const [errorMessage, setErrorMessage] = useState("");
 
-    <section class="summary">
-      <div class="card"><p class="card-title">전체 상품</p><p class="card-value" id="totalCount">0</p></div>
-      <div class="card"><p class="card-title">평균 리스크</p><p class="card-value slate" id="avgRiskScore">0</p></div>
-      <div class="card"><p class="card-title">정상</p><p class="card-value green" id="normalCount">0</p></div>
-      <div class="card"><p class="card-title">주의</p><p class="card-value yellow" id="warningCount">0</p></div>
-      <div class="card"><p class="card-title">긴급 관리</p><p class="card-value red" id="dangerCount">0</p></div>
-    </section>
+  const requiredColumns = [
+    "상품코드",
+    "상품명",
+    "채널",
+    "전월매출",
+    "당월매출",
+    "전월주문수",
+    "당월주문수",
+    "방문수",
+    "재고",
+    "전월별점",
+    "당월별점",
+    "전월문의수",
+    "당월문의수",
+    "광고비",
+    "광고매출"
+  ];
 
-    <section class="table-wrap">
-      <div class="scroll">
-        <table>
-          <thead>
-            <tr>
-              <th>상품코드</th>
-              <th>상품명</th>
-              <th>채널</th>
-              <th class="right">매출</th>
-              <th>매출 증감률</th>
-              <th>전환율</th>
-              <th>재고</th>
-              <th>별점</th>
-              <th>문의 증가</th>
-              <th>ROAS</th>
-              <th>리스크 점수</th>
-              <th>상태</th>
-              <th>추천 액션</th>
-            </tr>
-          </thead>
-          <tbody id="productTable"></tbody>
-        </table>
-      </div>
-    </section>
-  </main>
+  function toNumber(value) {
+    if (value === null || value === undefined || value === "") return 0;
+    return Number(String(value).replace(/,/g, "").replace(/%/g, "").trim()) || 0;
+  }
 
-  <script>
-    const sampleProducts = [
-      { productCode: "STL-800", name: "스틸라 800 수납장", channel: "오늘의집", prevSales: 12500000, currentSales: 8500000, prevOrders: 86, currentOrders: 61, visitors: 6800, stock: 24, prevRating: 4.4, currentRating: 4.1, prevInquiries: 12, currentInquiries: 19, adCost: 1800000, adSales: 3240000 },
-      { productCode: "BED-MSS", name: "모닝 SS 침대", channel: "스마트스토어", prevSales: 7300000, currentSales: 6400000, prevOrders: 37, currentOrders: 33, visitors: 1450, stock: 8, prevRating: 4.6, currentRating: 4.6, prevInquiries: 5, currentInquiries: 7, adCost: 600000, adSales: 2100000 },
-      { productCode: "FLP-HDL", name: "플러피 무헤드 침대", channel: "쿠팡", prevSales: 9200000, currentSales: 10850000, prevOrders: 52, currentOrders: 63, visitors: 2030, stock: 55, prevRating: 4.7, currentRating: 4.7, prevInquiries: 7, currentInquiries: 8, adCost: 900000, adSales: 4320000 },
-      { productCode: "DRS-HGR", name: "드레스룸 시스템 행거", channel: "자사몰", prevSales: 5400000, currentSales: 3190000, prevOrders: 31, currentOrders: 18, visitors: 2600, stock: 120, prevRating: 4.5, currentRating: 4.2, prevInquiries: 6, currentInquiries: 15, adCost: 950000, adSales: 1330000 }
+  function safeRate(numerator, denominator) {
+    if (!denominator) return 0;
+    return numerator / denominator;
+  }
+
+  function normalizeRows(rows) {
+    if (!rows.length) return [];
+
+    const columns = Object.keys(rows[0]);
+    const missingColumns = requiredColumns.filter((column) => !columns.includes(column));
+
+    if (missingColumns.length > 0) {
+      throw new Error(`필수 컬럼이 없습니다: ${missingColumns.join(", ")}`);
+    }
+
+    return rows
+      .filter((row) => row["상품코드"] || row["상품명"])
+      .map((row) => ({
+        productCode: String(row["상품코드"] || "").trim(),
+        name: String(row["상품명"] || "").trim(),
+        channel: String(row["채널"] || "").trim(),
+        prevSales: toNumber(row["전월매출"]),
+        currentSales: toNumber(row["당월매출"]),
+        prevOrders: toNumber(row["전월주문수"]),
+        currentOrders: toNumber(row["당월주문수"]),
+        visitors: toNumber(row["방문수"]),
+        stock: toNumber(row["재고"]),
+        prevRating: toNumber(row["전월별점"]),
+        currentRating: toNumber(row["당월별점"]),
+        prevInquiries: toNumber(row["전월문의수"]),
+        currentInquiries: toNumber(row["당월문의수"]),
+        adCost: toNumber(row["광고비"]),
+        adSales: toNumber(row["광고매출"])
+      }));
+  }
+
+  async function handleFileUpload(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setErrorMessage("");
+
+    try {
+      const buffer = await file.arrayBuffer();
+      const workbook = XLSX.read(buffer, { type: "array" });
+      const firstSheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[firstSheetName];
+      const rows = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+      const normalizedProducts = normalizeRows(rows);
+
+      if (normalizedProducts.length === 0) {
+        throw new Error("분석할 상품 데이터가 없습니다.");
+      }
+
+      setProducts(normalizedProducts);
+      setFileName(file.name);
+    } catch (error) {
+      setErrorMessage(error.message || "파일을 읽는 중 오류가 발생했습니다.");
+    }
+  }
+
+  function resetData() {
+    setProducts([]);
+    setFileName("업로드된 파일 없음");
+    setErrorMessage("");
+  }
+
+  function downloadTemplate() {
+    const templateRows = [
+      {
+        상품코드: "",
+        상품명: "",
+        채널: "",
+        전월매출: "",
+        당월매출: "",
+        전월주문수: "",
+        당월주문수: "",
+        방문수: "",
+        재고: "",
+        전월별점: "",
+        당월별점: "",
+        전월문의수: "",
+        당월문의수: "",
+        광고비: "",
+        광고매출: ""
+      }
     ];
 
-    let products = [...sampleProducts];
+    const worksheet = XLSX.utils.json_to_sheet(templateRows);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "원천데이터");
+    XLSX.writeFile(workbook, "상품진단_기초파일.xlsx");
+  }
 
-    const requiredColumns = [
-      "상품코드", "상품명", "채널", "전월매출", "당월매출", "전월주문수", "당월주문수", "방문수", "재고", "전월별점", "당월별점", "전월문의수", "당월문의수", "광고비", "광고매출"
-    ];
+  function formatNumber(value) {
+    return Math.round(value || 0).toLocaleString("ko-KR");
+  }
 
-    function toNumber(value) {
-      if (value === null || value === undefined || value === "") return 0;
-      return Number(String(value).replace(/,/g, "").replace(/%/g, "").trim()) || 0;
+  function formatPercent(value, digits = 1) {
+    return `${((value || 0) * 100).toFixed(digits)}%`;
+  }
+
+  function calculateMetrics(product) {
+    return {
+      salesChangeRate: safeRate(product.currentSales - product.prevSales, product.prevSales),
+      conversionRate: safeRate(product.currentOrders, product.visitors),
+      inquiryIncrease: product.currentInquiries - product.prevInquiries,
+      ratingChange: product.currentRating - product.prevRating,
+      roas: safeRate(product.adSales, product.adCost)
+    };
+  }
+
+  function diagnose(product) {
+    const metrics = calculateMetrics(product);
+    let riskScore = 0;
+    let actions = [];
+
+    if (metrics.salesChangeRate <= -0.3) {
+      riskScore += 25;
+      actions.push("매출 급락 원인 확인");
+    } else if (metrics.salesChangeRate <= -0.15) {
+      riskScore += 15;
+      actions.push("매출 하락 추세 점검");
+    } else if (metrics.salesChangeRate < 0) {
+      riskScore += 5;
     }
 
-    function safeRate(numerator, denominator) {
-      if (!denominator) return 0;
-      return numerator / denominator;
+    if (metrics.conversionRate < 0.01) {
+      riskScore += 20;
+      actions.push("전환율 개선 필요");
+    } else if (metrics.conversionRate < 0.02) {
+      riskScore += 10;
+      actions.push("전환율 주의");
     }
 
-    function formatNumber(value) {
-      return Math.round(value || 0).toLocaleString("ko-KR");
+    if (product.stock <= 10) {
+      riskScore += 15;
+      actions.push("품절 임박 재고 확보");
+    } else if (product.stock <= 30) {
+      riskScore += 7;
+      actions.push("재고 주의");
     }
 
-    function formatPercent(value, digits = 1) {
-      return `${((value || 0) * 100).toFixed(digits)}%`;
+    if (product.currentRating <= 4.3) {
+      riskScore += 15;
+      actions.push("리뷰/품질 이슈 확인");
+    } else if (metrics.ratingChange <= -0.2) {
+      riskScore += 8;
+      actions.push("별점 하락 확인");
     }
 
-    function calculateMetrics(product) {
-      return {
-        salesChangeRate: safeRate(product.currentSales - product.prevSales, product.prevSales),
-        conversionRate: safeRate(product.currentOrders, product.visitors),
-        inquiryIncrease: product.currentInquiries - product.prevInquiries,
-        ratingChange: product.currentRating - product.prevRating,
-        roas: safeRate(product.adSales, product.adCost)
-      };
+    if (metrics.inquiryIncrease >= 5) {
+      riskScore += 10;
+      actions.push("문의 급증 원인 확인");
+    } else if (metrics.inquiryIncrease >= 3) {
+      riskScore += 5;
+      actions.push("문의 증가 추세 확인");
     }
 
-    function diagnose(product) {
-      const metrics = calculateMetrics(product);
-      let riskScore = 0;
-      let actions = [];
-
-      if (metrics.salesChangeRate <= -0.3) {
-        riskScore += 25;
-        actions.push("매출 급락 원인 확인");
-      } else if (metrics.salesChangeRate <= -0.15) {
-        riskScore += 15;
-        actions.push("매출 하락 추세 점검");
-      } else if (metrics.salesChangeRate < 0) {
-        riskScore += 5;
-      }
-
-      if (metrics.conversionRate < 0.01) {
-        riskScore += 20;
-        actions.push("전환율 개선 필요");
-      } else if (metrics.conversionRate < 0.02) {
-        riskScore += 10;
-        actions.push("전환율 주의");
-      }
-
-      if (product.stock <= 10) {
-        riskScore += 15;
-        actions.push("품절 임박 재고 확보");
-      } else if (product.stock <= 30) {
-        riskScore += 7;
-        actions.push("재고 주의");
-      }
-
-      if (product.currentRating <= 4.3) {
-        riskScore += 15;
-        actions.push("리뷰/품질 이슈 확인");
-      } else if (metrics.ratingChange <= -0.2) {
-        riskScore += 8;
-        actions.push("별점 하락 확인");
-      }
-
-      if (metrics.inquiryIncrease >= 5) {
-        riskScore += 10;
-        actions.push("문의 급증 원인 확인");
-      } else if (metrics.inquiryIncrease >= 3) {
-        riskScore += 5;
-        actions.push("문의 증가 추세 확인");
-      }
-
-      if (metrics.roas < 2) {
-        riskScore += 15;
-        actions.push("광고 효율 긴급 점검");
-      } else if (metrics.roas < 3) {
-        riskScore += 7;
-        actions.push("ROAS 개선 검토");
-      }
-
-      riskScore = Math.min(100, riskScore);
-
-      let status = "정상";
-      let badgeClass = "badge-normal";
-
-      if (riskScore >= 60) {
-        status = "긴급 관리";
-        badgeClass = "badge-danger";
-      } else if (riskScore >= 30) {
-        status = "주의";
-        badgeClass = "badge-warning";
-      }
-
-      return { ...metrics, riskScore, status, badgeClass, actions };
+    if (metrics.roas < 2) {
+      riskScore += 15;
+      actions.push("광고 효율 긴급 점검");
+    } else if (metrics.roas < 3) {
+      riskScore += 7;
+      actions.push("ROAS 개선 검토");
     }
 
-    function normalizeRows(rows) {
-      if (!rows.length) return [];
-      const columns = Object.keys(rows[0]);
-      const missingColumns = requiredColumns.filter(column => !columns.includes(column));
+    riskScore = Math.min(100, riskScore);
 
-      if (missingColumns.length > 0) {
-        throw new Error(`필수 컬럼이 없습니다: ${missingColumns.join(", ")}`);
-      }
+    let status = "정상";
+    let style = "bg-green-100 text-green-700";
 
-      return rows
-        .filter(row => row["상품코드"] || row["상품명"])
-        .map(row => ({
-          productCode: String(row["상품코드"] || "").trim(),
-          name: String(row["상품명"] || "").trim(),
-          channel: String(row["채널"] || "").trim(),
-          prevSales: toNumber(row["전월매출"]),
-          currentSales: toNumber(row["당월매출"]),
-          prevOrders: toNumber(row["전월주문수"]),
-          currentOrders: toNumber(row["당월주문수"]),
-          visitors: toNumber(row["방문수"]),
-          stock: toNumber(row["재고"]),
-          prevRating: toNumber(row["전월별점"]),
-          currentRating: toNumber(row["당월별점"]),
-          prevInquiries: toNumber(row["전월문의수"]),
-          currentInquiries: toNumber(row["당월문의수"]),
-          adCost: toNumber(row["광고비"]),
-          adSales: toNumber(row["광고매출"])
-        }));
+    if (riskScore >= 60) {
+      status = "긴급 관리";
+      style = "bg-red-100 text-red-700";
+    } else if (riskScore >= 30) {
+      status = "주의";
+      style = "bg-yellow-100 text-yellow-700";
     }
 
-    function render() {
-      const analyzed = products.map(product => ({ ...product, result: diagnose(product) }));
-      const normalCount = analyzed.filter(p => p.result.status === "정상").length;
-      const warningCount = analyzed.filter(p => p.result.status === "주의").length;
-      const dangerCount = analyzed.filter(p => p.result.status === "긴급 관리").length;
-      const avgRiskScore = analyzed.length ? Math.round(analyzed.reduce((sum, p) => sum + p.result.riskScore, 0) / analyzed.length) : 0;
+    return {
+      ...metrics,
+      riskScore,
+      status,
+      style,
+      actions
+    };
+  }
 
-      document.getElementById("totalCount").textContent = products.length;
-      document.getElementById("avgRiskScore").textContent = avgRiskScore;
-      document.getElementById("normalCount").textContent = normalCount;
-      document.getElementById("warningCount").textContent = warningCount;
-      document.getElementById("dangerCount").textContent = dangerCount;
+  const analyzed = useMemo(
+    () =>
+      products.map((p) => ({
+        ...p,
+        result: diagnose(p)
+      })),
+    [products]
+  );
 
-      const tbody = document.getElementById("productTable");
-      tbody.innerHTML = analyzed.map(product => {
-        const salesClass = product.result.salesChangeRate < 0 ? "negative" : "positive";
-        const actionHtml = product.result.actions.length
-          ? `<ul>${product.result.actions.map(action => `<li>${action}</li>`).join("")}</ul>`
-          : "특이사항 없음";
+  const normalCount = analyzed.filter((p) => p.result.status === "정상").length;
+  const warningCount = analyzed.filter((p) => p.result.status === "주의").length;
+  const dangerCount = analyzed.filter((p) => p.result.status === "긴급 관리").length;
+  const avgRiskScore = analyzed.length
+    ? Math.round(analyzed.reduce((sum, p) => sum + p.result.riskScore, 0) / analyzed.length)
+    : 0;
 
-        return `
-          <tr>
-            <td class="code">${product.productCode}</td>
-            <td class="product-name">${product.name}</td>
-            <td>${product.channel}</td>
-            <td class="right">${formatNumber(product.currentSales)}</td>
-            <td class="${salesClass}">${formatPercent(product.result.salesChangeRate)}</td>
-            <td>${formatPercent(product.result.conversionRate)}</td>
-            <td>${product.stock}개</td>
-            <td>${product.currentRating}</td>
-            <td>${product.result.inquiryIncrease}건</td>
-            <td>${formatPercent(product.result.roas, 0)}</td>
-            <td><strong>${product.result.riskScore}점</strong></td>
-            <td><span class="badge ${product.result.badgeClass}">${product.result.status}</span></td>
-            <td class="actions">${actionHtml}</td>
-          </tr>
-        `;
-      }).join("");
-    }
+  return (
+    <div className="min-h-screen bg-slate-100 p-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-slate-900 mb-2">
+            상품 진단 시스템
+          </h1>
+          <p className="text-slate-600 text-lg">
+            원천 데이터를 업로드하면 매출증감률, 전환율, 문의증가수, ROAS, 진단점수를 자동 계산합니다.
+          </p>
+        </div>
 
-    function showError(message) {
-      const errorBox = document.getElementById("errorBox");
-      errorBox.textContent = message;
-      errorBox.style.display = "block";
-    }
+        <div className="bg-white rounded-3xl shadow-sm p-6 mb-8">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+            <div>
+              <h2 className="text-xl font-bold text-slate-900 mb-2">파일 업로드 분석</h2>
+              <p className="text-slate-600 text-sm leading-6">
+                필수 컬럼: 상품코드, 상품명, 채널, 전월매출, 당월매출, 전월주문수, 당월주문수, 방문수, 재고, 전월별점, 당월별점, 전월문의수, 당월문의수, 광고비, 광고매출
+              </p>
+              <p className="text-slate-500 text-sm mt-1">현재 데이터: {fileName}</p>
+              <p className="text-slate-500 text-sm mt-1">
+                진단점수는 0~100점 기준이며, 점수가 높을수록 운영 리스크가 큽니다. 0~29 정상 / 30~59 주의 / 60 이상 긴급 관리
+              </p>
+            </div>
 
-    function hideError() {
-      const errorBox = document.getElementById("errorBox");
-      errorBox.textContent = "";
-      errorBox.style.display = "none";
-    }
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={downloadTemplate}
+                className="bg-white border border-slate-300 text-slate-800 px-5 py-3 rounded-2xl text-sm font-bold hover:bg-slate-50"
+              >
+                기초파일 다운로드
+              </button>
+              <label className="cursor-pointer bg-slate-900 text-white px-5 py-3 rounded-2xl text-sm font-bold hover:bg-slate-700 text-center">
+                파일 업로드
+                <input
+                  type="file"
+                  accept=".csv,.xlsx,.xls"
+                  className="hidden"
+                  onChange={handleFileUpload}
+                />
+              </label>
+              <button
+                onClick={resetData}
+                className="bg-slate-100 text-slate-700 px-5 py-3 rounded-2xl text-sm font-bold hover:bg-slate-200"
+              >
+                초기화
+              </button>
+            </div>
+          </div>
 
-    function resetSampleData() {
-      products = [...sampleProducts];
-      document.getElementById("fileName").textContent = "현재 데이터: 샘플 데이터 사용 중";
-      document.getElementById("fileInput").value = "";
-      hideError();
-      render();
-    }
+          {errorMessage && (
+            <div className="mt-5 bg-red-50 text-red-700 rounded-2xl p-4 text-sm font-medium">
+              {errorMessage}
+            </div>
+          )}
+        </div>
 
-    document.getElementById("fileInput").addEventListener("change", async function(event) {
-      const file = event.target.files[0];
-      if (!file) return;
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-5 mb-8">
+          <div className="bg-white rounded-3xl shadow-sm p-6">
+            <p className="text-slate-500 text-sm">전체 상품</p>
+            <h2 className="text-4xl font-bold mt-3">{products.length}</h2>
+          </div>
 
-      hideError();
+          <div className="bg-white rounded-3xl shadow-sm p-6">
+            <p className="text-slate-500 text-sm">평균 리스크</p>
+            <h2 className="text-4xl font-bold text-slate-800 mt-3">{avgRiskScore}</h2>
+          </div>
 
-      try {
-        const buffer = await file.arrayBuffer();
-        const workbook = XLSX.read(buffer, { type: "array" });
-        const firstSheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[firstSheetName];
-        const rows = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-        const normalizedProducts = normalizeRows(rows);
+          <div className="bg-white rounded-3xl shadow-sm p-6">
+            <p className="text-slate-500 text-sm">정상</p>
+            <h2 className="text-4xl font-bold text-green-600 mt-3">{normalCount}</h2>
+          </div>
 
-        if (normalizedProducts.length === 0) {
-          throw new Error("분석할 상품 데이터가 없습니다.");
-        }
+          <div className="bg-white rounded-3xl shadow-sm p-6">
+            <p className="text-slate-500 text-sm">주의</p>
+            <h2 className="text-4xl font-bold text-yellow-600 mt-3">{warningCount}</h2>
+          </div>
 
-        products = normalizedProducts;
-        document.getElementById("fileName").textContent = `현재 데이터: ${file.name}`;
-        render();
-      } catch (error) {
-        showError(error.message || "파일을 읽는 중 오류가 발생했습니다.");
-      }
-    });
+          <div className="bg-white rounded-3xl shadow-sm p-6">
+            <p className="text-slate-500 text-sm">긴급 관리</p>
+            <h2 className="text-4xl font-bold text-red-600 mt-3">{dangerCount}</h2>
+          </div>
+        </div>
 
-    render();
-  </script>
-</body>
-</html>
+        <div className="bg-white rounded-3xl shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-slate-50 border-b border-slate-200">
+                <tr>
+                  <th className="text-left p-4">상품코드</th>
+                  <th className="text-left p-4">상품명</th>
+                  <th className="text-left p-4">채널</th>
+                  <th className="text-right p-4">매출</th>
+                  <th className="text-left p-4">매출 증감률</th>
+                  <th className="text-left p-4">전환율</th>
+                  <th className="text-left p-4">재고</th>
+                  <th className="text-left p-4">별점</th>
+                  <th className="text-left p-4">문의 증가</th>
+                  <th className="text-left p-4">ROAS</th>
+                  <th className="text-left p-4">리스크 점수</th>
+                  <th className="text-left p-4">상태</th>
+                  <th className="text-left p-4">추천 액션</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {analyzed.length === 0 ? (
+                  <tr>
+                    <td colSpan="13" className="p-10 text-center text-slate-500">
+                      기초파일을 다운로드해 원천데이터를 입력한 뒤 파일을 업로드해 주세요.
+                    </td>
+                  </tr>
+                ) : (
+                  analyzed.map((product, idx) => (
+                    <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
+                      <td className="p-4 font-medium text-slate-500">{product.productCode}</td>
+                      <td className="p-4 font-semibold min-w-[180px]">{product.name}</td>
+                      <td className="p-4">{product.channel}</td>
+                      <td className="p-4 text-right">{formatNumber(product.currentSales)}</td>
+                      <td className={`p-4 font-medium ${product.result.salesChangeRate < 0 ? "text-red-500" : "text-green-600"}`}>
+                        {formatPercent(product.result.salesChangeRate)}
+                      </td>
+                      <td className="p-4">{formatPercent(product.result.conversionRate)}</td>
+                      <td className="p-4">{product.stock}개</td>
+                      <td className="p-4">{product.currentRating}</td>
+                      <td className="p-4">{product.result.inquiryIncrease}건</td>
+                      <td className="p-4">{formatPercent(product.result.roas, 0)}</td>
+                      <td className="p-4 font-bold">{product.result.riskScore}점</td>
+                      <td className="p-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${product.result.style}`}>
+                          {product.result.status}
+                        </span>
+                      </td>
+                      <td className="p-4 text-slate-600 leading-6 min-w-[240px]">
+                        {product.result.actions.length > 0 ? (
+                          <ul className="list-disc ml-4 space-y-1">
+                            {product.result.actions.map((action, i) => (
+                              <li key={i}>{action}</li>
+                            ))}
+                          </ul>
+                        ) : (
+                          "특이사항 없음"
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
