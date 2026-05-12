@@ -29,7 +29,7 @@
 
 ## 🛠 Side Projects
 실무의 문제 해결을 위해 직접 기획하고 구현한 도구들입니다.
-- **상품 진단 시스템:** [상품 진단 시스템](https://career-archive-liard.vercel.app/) 상품 운영 진단 리포트
+- **상품 진단 시스템:** [상품 진단 시스템](https://career-archive-liard.vercel.app/)
 
 ---
 ## 📫 Contact
