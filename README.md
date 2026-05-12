@@ -29,8 +29,7 @@
 
 ## 🛠 Side Projects
 실무의 문제 해결을 위해 직접 기획하고 구현한 도구들입니다.
-- **[통합 채널 프라이싱 대시보드](https://github.com/Marble-joo/md-workspace):** 채널별 수수료를 반영한 실시간 마진 시뮬레이션 툴
-- **상품명 자동완성:** [다채널 키워드 데이터 수집기](https://career-archive-liard.vercel.app/)
+- **상품 진단 시스템:** [상품 진단 시스템](https://career-archive-liard.vercel.app/) 상품 운영 진단 리포트
 
 ---
 ## 📫 Contact
