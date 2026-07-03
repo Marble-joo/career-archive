@@ -9,7 +9,7 @@
 - **Data & Tools:** Google Analytics, MS Excel (Advanced), Notion, Slack, ERP/SCM
 - **Strategy:** Search SEO, Promotion Planning, CRM Marketing, Pricing Strategy
 
-## 🏢 Work Experience
+## 🏢 Key Achievements
 **이노센트 (Innocent)** | MD | *2025.07 ~ Present*
 - **Portfolio Scaling:** 신상품 매출 비중 **3% → 10%** 확대 및 카테고리 경쟁력 강화
 - **Channel Strategy:** 브랜드스토어 전담 운영 및 종합몰 프로모션 기획 주도
