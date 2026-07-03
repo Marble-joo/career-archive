@@ -32,5 +32,5 @@
 - **상품 진단 시스템:** [상품 진단 시스템](https://career-archive-liard.vercel.app/)
 
 ---
-## 📫 Contact
-- **Email:** trio9097@gmail.com
+##📎 Portfolio Download
+- [유선주 커머스 MD 업무 포트폴리오 (PDF 다운로드)](./유선주의%20포트폴리오.pdf)
