@@ -5,9 +5,10 @@
 단순한 상품 등록을 넘어, 시장 데이터 분석을 통한 **수익성 최적화**와 **반복 업무의 시스템화**를 지향합니다. 오프라인 현장 경험에서 얻은 고객 접점 인사이트를 온라인 채널 전략에 녹여내어 가시적인 매출 성장을 만들어냅니다.
 
 ## 🛠 Skills & Tools
-- **Commerce:** Smart Store(Brand Store), Coupang(Rocket Growth), Jasa-mall, Comprehensive Malls
-- **Data & Tools:** Google Analytics, MS Excel (Advanced), Notion, Slack, ERP/SCM
-- **Strategy:** Search SEO, Promotion Planning, CRM Marketing, Pricing Strategy
+- **Commerce:** 스마트스토어(브랜드스토어), 자사몰, 쿠팡(로켓그로우), 종합몰(GS SHOP, SSG, 롯데ON)
+- **Strategy:** 검색엔진 SEO, 프로모션 기획, CRM 마케팅, 가격관리
+- **Tools:** 엑셀, 노션, ERP/SCM, Slack
+
 
 ## 🏢 Key Achievements
 **이노센트 (Innocent)** | MD | *2025.07 ~ Present*
